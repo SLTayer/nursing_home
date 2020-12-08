@@ -28,6 +28,7 @@ public class Treatment {
         this.tid = tid;
         this.pid = pid;
         this.date = date;
+        this.date = date;
         this.begin = begin;
         this.end = end;
         this.description = description;

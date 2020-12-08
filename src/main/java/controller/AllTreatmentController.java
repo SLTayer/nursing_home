@@ -67,7 +67,6 @@ public class AllTreatmentController {
 
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
-        comboBox.getSelectionModel().select(0);
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
         try {
@@ -92,7 +91,6 @@ public class AllTreatmentController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     public void handleComboBox(){
@@ -138,7 +136,7 @@ public class AllTreatmentController {
         Treatment t = this.tableviewContent.remove(index);
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            dao.deleteById(t.getTid());
+            dao.deleteById((int) t.getTid());
         } catch (SQLException e) {
             e.printStackTrace();
         }
