@@ -111,7 +111,7 @@ public class PatientDAO extends DAOimp<Patient> {
      * Creates a backup for the Patient Data
      */
     public boolean createBackup() throws SQLException {
-        // BEI BACKUP GEHEN IDS VERLOREN !! FIX LATER :>
+        // BACKUPS IN SEPERATE TABELLE LADEN
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate today = LocalDate.parse(dateFormat.format(new Date()));

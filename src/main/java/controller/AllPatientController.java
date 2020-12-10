@@ -172,7 +172,6 @@ public class AllPatientController {
         List<Patient> allPatients;
         try {
             allPatients = dao.readAll();
-            dao.createBackup();
             for (Patient p : allPatients) {
                 this.tableviewContent.add(p);
             }
@@ -221,11 +220,23 @@ public class AllPatientController {
     }
 
     /**
-     * handles a backup-click-event. Creates a patient table backup and calls the backup method in the {@link PatientDAO}
+     * handles a backup-create-click-event. Creates a patient table backup and calls the createBackup method in the {@link PatientDAO}
      */
     @FXML
-    public void handleBackup() {
-        System.out.println("dummer nutten hehe");
+    public void handleCreateBackup() {
+        try {
+            dao.createBackup();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * handles a backup-load-click-event. Loads a patient table backup and calls the loadBackup method in the {@link PatientDAO}
+     */
+    @FXML
+    public void handleLoadBackup() {
+        System.out.println("dummer nutten hehe 2");
     }
 
     /**

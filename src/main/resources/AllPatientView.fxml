@@ -68,8 +68,8 @@
                <children>
                   <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#handleDeleteRow" prefWidth="105.0" text="Löschen" GridPane.columnIndex="1" />
                   <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#handleAdd" prefWidth="105.0" text="Hinzufügen" />
-                  <Button mnemonicParsing="false" prefWidth="105.0" text="Backup laden" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" prefWidth="105.0" text="Backup erstellen" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" prefWidth="105.0" onAction="#handleLoadBackup" text="Backup laden" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" prefWidth="105.0" onAction="#handleCreateBackup" text="Backup erstellen" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
