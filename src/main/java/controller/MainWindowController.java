@@ -5,11 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import java.io.IOException;
+import javafx.scene.control.TextField;
 
 public class MainWindowController {
 
     @FXML
     private BorderPane mainBorderPane;
+    @FXML private TextField UsernameInput;
+    @FXML private TextField PasswordInput;
 
     @FXML
     private void handleShowAllPatient(ActionEvent e) {
@@ -42,5 +45,22 @@ public class MainWindowController {
             ex.printStackTrace();
         }
         AllCaregiverController controller = loader.getController();
+    }
+    @FXML
+    private void handleLogin(ActionEvent e) {
+
+        String username = UsernameInput.getText();
+        String password = PasswordInput.getText();
+
+
+
+         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
+        try {
+            mainBorderPane.setCenter(loader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
     }
 }
