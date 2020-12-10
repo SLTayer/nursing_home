@@ -3,6 +3,9 @@ package datastorage;
 import model.Patient;
 import utils.DateConverter;
 
+import java.sql.Statement;
+import java.text.*;
+import java.util.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +32,13 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
-        return String.format("INSERT INTO patient (firstname, surname, dateOfBirth, carelevel, roomnumber, assets) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+        String version;
+        if (patient.getVersion() == null) {
+            version = "null";
+        } else {
+            version = "'" + patient.getVersion() + "'";
+        }
+        return String.format("INSERT INTO patient (firstname, surname, dateOfBirth, carelevel, roomnumber, assets, version) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', " + version + ")",
                 patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets());
     }
 
@@ -54,7 +63,7 @@ public class PatientDAO extends DAOimp<Patient> {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
-                result.getString(6), result.getString(7));
+                result.getString(6), result.getString(7), null);
         return p;
     }
 
@@ -64,7 +73,7 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getReadAllStatementString() {
-        return "SELECT * FROM patient";
+        return "SELECT * FROM patient WHERE version IS NULL";
     }
 
     /**
@@ -80,7 +89,7 @@ public class PatientDAO extends DAOimp<Patient> {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
-                    result.getString(5), result.getString(6), result.getString(7));
+                    result.getString(5), result.getString(6), result.getString(7), null);
             list.add(p);
         }
         return list;
@@ -96,6 +105,41 @@ public class PatientDAO extends DAOimp<Patient> {
         return String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
                 "roomnumber = '%s', assets = '%s' WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
                 patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets(), patient.getPid());
+    }
+
+    /**
+     * Creates a backup for the Patient Data
+     */
+    public boolean createBackup() throws SQLException {
+        // BEI BACKUP GEHEN IDS VERLOREN !! FIX LATER :>
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate today = LocalDate.parse(dateFormat.format(new Date()));
+
+        ArrayList<Patient> list = new ArrayList<Patient>();
+        Patient object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(this.getReadAllStatementString());
+        list = this.getListFromResultSet(result);
+
+        System.out.println("Cock: " + list.size());
+
+        for (Patient patient : list) {
+            String firstname = patient.getFirstName();
+            String surname = patient.getSurname();
+            LocalDate date = DateConverter.convertStringToLocalDate(patient.getDateOfBirth());
+            String carelevel = patient.getCareLevel();
+            String room = patient.getRoomnumber();
+            String assets = patient.getAssets();
+
+            try {
+                Patient p = new Patient(firstname, surname, date, carelevel, room, assets, today);
+                st.executeUpdate(this.getCreateStatementString(p));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 
     /**

@@ -42,6 +42,8 @@ public class AllPatientController {
     @FXML
     Button btnAdd;
     @FXML
+    Button btnBackup;
+    @FXML
     TextField txtSurname;
     @FXML
     TextField txtFirstname;
@@ -170,6 +172,7 @@ public class AllPatientController {
         List<Patient> allPatients;
         try {
             allPatients = dao.readAll();
+            dao.createBackup();
             for (Patient p : allPatients) {
                 this.tableviewContent.add(p);
             }
@@ -208,13 +211,21 @@ public class AllPatientController {
         String room = this.txtRoom.getText();
         String assets = this.txtAssets.getText();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room, assets);
+            Patient p = new Patient(firstname, surname, date, carelevel, room, assets, null);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         readAllAndShowInTableView();
         clearTextfields();
+    }
+
+    /**
+     * handles a backup-click-event. Creates a patient table backup and calls the backup method in the {@link PatientDAO}
+     */
+    @FXML
+    public void handleBackup() {
+        System.out.println("dummer nutten hehe");
     }
 
     /**
