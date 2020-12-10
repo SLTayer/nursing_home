@@ -88,8 +88,15 @@ public class AllCaregiverController {
 
 
     @FXML
+
+
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event){
-        event.getRowValue().setSurname(event.getNewValue());
+        String name;
+        name = event.getNewValue();
+
+
+
+        event.getRowValue().setSurname(name);
         doUpdate(event);
     }
 
