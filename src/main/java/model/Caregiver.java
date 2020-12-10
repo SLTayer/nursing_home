@@ -12,7 +12,7 @@ public class Caregiver extends Person {
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
 
 
-    public Caregiver(String firstname, String firstName, String surname) {
+    public Caregiver( String firstName, String surname, String phoneNumber) {
         super(firstName, surname);
         this.phoneNumber = phoneNumber;
     }
