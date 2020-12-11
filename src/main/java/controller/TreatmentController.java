@@ -6,6 +6,7 @@ import datastorage.TreatmentDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
@@ -18,6 +19,8 @@ public class TreatmentController {
     private Label lblPatientName;
     @FXML
     private Label lblCarelevel;
+    @FXML
+    private Label lblCaregiverName;
     @FXML
     private TextField txtBegin;
     @FXML
@@ -37,6 +40,7 @@ public class TreatmentController {
     private Stage stage;
     private Patient patient;
     private Treatment treatment;
+    private Caregiver caregiver;
 
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
@@ -49,11 +53,20 @@ public class TreatmentController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        /*CaregiverDAO cDao = DAOFactory.getDAOFactory().createCaregiverDAO();
+        try {
+            this.caregiver = cDao.read((int) treatment.getCid());
+            this.treatment = treatment;
+            showData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
     }
 
     private void showData(){
         this.lblPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
         this.lblCarelevel.setText(patient.getCareLevel());
+       //this.lblCaregiverName.setText(caregiver.getSurname()+", "+caregiver.getFirstName()+", "+caregiver.getPhoneNumber());
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datepicker.setValue(date);
         this.txtBegin.setText(this.treatment.getBegin());

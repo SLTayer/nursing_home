@@ -1,5 +1,7 @@
 package controller;
 
+import datastorage.CaregiverDAO;
+import datastorage.DAOFactory;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
@@ -11,9 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
-import datastorage.DAOFactory;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ public class AllTreatmentController {
     @FXML
     private TableColumn<Treatment, Integer> colPid;
     @FXML
+    private TableColumn<Treatment, Integer> colCid;
+    @FXML
     private TableColumn<Treatment, String> colDate;
     @FXML
     private TableColumn<Treatment, String> colBegin;
@@ -37,6 +42,8 @@ public class AllTreatmentController {
     @FXML
     private ComboBox<String> comboBox;
     @FXML
+    private ComboBox<String> comboBox2;
+    @FXML
     private Button btnNewTreatment;
     @FXML
     private Button btnDelete;
@@ -46,7 +53,10 @@ public class AllTreatmentController {
     private TreatmentDAO dao;
     private ObservableList<String> myComboBoxData =
             FXCollections.observableArrayList();
+    private ObservableList<String> myComboBoxData2 =
+            FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
+    private ArrayList<Caregiver> caregiverList;
     private Main main;
 
     public void initialize() {
@@ -57,6 +67,7 @@ public class AllTreatmentController {
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
         this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("pid"));
+        this.colCid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("cid"));
         this.colDate.setCellValueFactory(new PropertyValueFactory<Treatment, String>("date"));
         this.colBegin.setCellValueFactory(new PropertyValueFactory<Treatment, String>("begin"));
         this.colEnd.setCellValueFactory(new PropertyValueFactory<Treatment, String>("end"));
@@ -108,6 +119,7 @@ public class AllTreatmentController {
                 e.printStackTrace();
             }
         }
+
         Patient patient = searchInList(p);
         if(patient !=null){
             try {
@@ -125,6 +137,58 @@ public class AllTreatmentController {
         for (int i =0; i<this.patientList.size();i++){
             if(this.patientList.get(i).getSurname().equals(surname)){
                 return this.patientList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private void createComboBoxData2(){
+        CaregiverDAO dao = DAOFactory.getDAOFactory().createCaregiverDAO();
+        try {
+            caregiverList = (ArrayList<Caregiver>) dao.readAll();
+            this.myComboBoxData2.add("alle");
+            for (Patient patient: patientList) {
+                this.myComboBoxData2.add(colCid.getStyle());
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleComboBox2(){
+        String c = this.comboBox2.getSelectionModel().getSelectedItem();
+        this.tableviewContent.clear();
+        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        List<Treatment> allTreatments;
+        if(c.equals("alle")){
+            try {
+                allTreatments= this.dao.readAll();
+                for (Treatment treatment : allTreatments) {
+                    this.tableviewContent.add(treatment);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Caregiver caregiver = searchInList2(c);
+        if(caregiver !=null){
+            try {
+                allTreatments = dao.readTreatmentsByPid(caregiver.getCid());
+                for (Treatment treatment : allTreatments) {
+                    this.tableviewContent.add(treatment);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Caregiver searchInList2(String surname){
+        for (int i =0; i<this.caregiverList.size();i++){
+            if(this.caregiverList.get(i).getSurname().equals(surname)){
+                return this.caregiverList.get(i);
             }
         }
         return null;
@@ -194,7 +258,7 @@ public class AllTreatmentController {
             Stage stage = new Stage();
             TreatmentController controller = loader.getController();
 
-            controller.initializeController(this, stage, treatment);
+            controller.initializeController(this, stage, treatment );
 
             stage.setScene(scene);
             stage.setResizable(false);

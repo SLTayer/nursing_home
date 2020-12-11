@@ -8,9 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +22,8 @@ public class NewTreatmentController {
     private Label lblSurname;
     @FXML
     private Label lblFirstname;
+    @FXML
+    private Label lblCaregiverName;
     @FXML
     private TextField txtBegin;
     @FXML
@@ -34,6 +38,7 @@ public class NewTreatmentController {
     private AllTreatmentController controller;
     private Patient patient;
     private Stage stage;
+    private Caregiver caregiver;
 
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
         this.controller= controller;
@@ -45,6 +50,7 @@ public class NewTreatmentController {
     private void showPatientData(){
         this.lblFirstname.setText(patient.getFirstName());
         this.lblSurname.setText(patient.getSurname());
+        this.lblCaregiverName.setText(caregiver.getSurname());
     }
 
     @FXML
@@ -55,7 +61,8 @@ public class NewTreatmentController {
         LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
         String description = txtDescription.getText();
         String remarks = taRemarks.getText();
-        Treatment treatment = new Treatment(patient.getPid(), date,
+        long cid = 0;
+        Treatment treatment = new Treatment(patient.getPid(),cid,date,
                 begin, end, description, remarks);
         createTreatment(treatment);
         controller.readAllAndShowInTableView();
