@@ -49,14 +49,6 @@ public class AllCaregiverController {
     private ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
     private CaregiverDAO dao;
 
-    public AllCaregiverController(TableView<Caregiver> tableView, TableColumn<Caregiver, Integer> colID, TableColumn<Caregiver, String> colFirstName, TableColumn<Caregiver, String> colSurname, TableColumn<Caregiver, String> colPhoneNumber) {
-        this.tableView = tableView;
-        this.colID = colID;
-        this.colFirstName = colFirstName;
-        this.colSurname = colSurname;
-        this.colPhoneNumber = colPhoneNumber;
-    }
-
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
      */
