@@ -63,4 +63,14 @@ public class MainWindowController {
 
 
     }
+    @FXML
+    private void handleShowAllUsers(ActionEvent e) {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllUsersView.fxml"));
+        try {
+            mainBorderPane.setCenter(loader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        AllTreatmentController controller = loader.getController();
+    }
 }
