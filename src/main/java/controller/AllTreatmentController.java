@@ -149,7 +149,7 @@ public class AllTreatmentController {
         try {
             caregiverList = (ArrayList<Caregiver>) dao.readAll();
             this.myComboBoxData2.add("alle");
-            for (Patient patient: patientList) {
+            for (Caregiver caregiver: caregiverList) {
                 this.myComboBoxData2.add(colCid.getStyle());
             }
         }catch(SQLException e){
