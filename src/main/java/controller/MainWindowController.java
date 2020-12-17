@@ -71,6 +71,6 @@ public class MainWindowController {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        AllTreatmentController controller = loader.getController();
+        AllUserController controller = loader.getController();
     }
 }
