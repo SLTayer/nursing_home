@@ -111,8 +111,6 @@ public class PatientDAO extends DAOimp<Patient> {
      * Creates a backup for the Patient Data
      */
     public boolean createBackup() throws SQLException {
-        // BACKUPS IN SEPERATE TABELLE LADEN
-
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate today = LocalDate.parse(dateFormat.format(new Date()));
 
@@ -121,8 +119,6 @@ public class PatientDAO extends DAOimp<Patient> {
         Statement st = conn.createStatement();
         ResultSet result = st.executeQuery(this.getReadAllStatementString());
         list = this.getListFromResultSet(result);
-
-        System.out.println("Cock: " + list.size());
 
         for (Patient patient : list) {
             String firstname = patient.getFirstName();
@@ -139,6 +135,24 @@ public class PatientDAO extends DAOimp<Patient> {
                 e.printStackTrace();
             }
         }
+        return true;
+    }
+
+    /**
+     * Returns the different Backup Versions
+     */
+    public boolean getBackups() throws SQLException {
+
+        String statement = "SELECT * FROM patient";
+        // Eigentlich wollte ich den QUERY "SELECT DISTINCT version FROM patient" benutzen,
+        // Jedoch hat dieser nicht funktioniert. Deshalb filter ich die verschiedenen Versionen jetzt händisch raus.
+
+        ArrayList<Patient> list = new ArrayList<Patient>();
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(statement);
+        list = this.getListFromResultSet(result);
+
+        System.out.println(list);
         return true;
     }
 

@@ -236,7 +236,11 @@ public class AllPatientController {
      */
     @FXML
     public void handleLoadBackup() {
-        System.out.println("dummer nutten hehe 2");
+        try {
+            dao.getBackups();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
