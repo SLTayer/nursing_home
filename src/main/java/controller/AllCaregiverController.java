@@ -172,18 +172,47 @@ public class AllCaregiverController {
 
     @FXML
     public void handleAdd() {
-        String firstname = this.txtFirstname.getText();
-        String surname = this.txtSurname.getText();
-        String phoneNumber = this.txtPhoneNumber.getText();
 
-        try {
-            Caregiver c = new Caregiver(firstname, surname, phoneNumber);
-            dao.create(c);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Boolean hasNumeric = false;
+        String sample = this.txtFirstname.getText();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
         }
-        readAllAndShowInTableView();
+        Boolean hasNumeric2 = false;
+        String sample2 = this.txtSurname.getText();
+        char[] chars2 = sample.toCharArray();
+        StringBuilder sb2 = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+
+        if ((hasNumeric) | (hasNumeric2))
+        {
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        }
+        else
+            {
+            String firstname = this.txtFirstname.getText();
+            String surname = this.txtSurname.getText();
+            String phoneNumber = this.txtPhoneNumber.getText();
+
+            try {
+                Caregiver c = new Caregiver(firstname, surname, phoneNumber);
+                dao.create(c);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            readAllAndShowInTableView();
+        }
         clearTextfields();
+
     }
 
 
