@@ -11,6 +11,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
+import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -95,9 +97,27 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setFirstName(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setFirstName(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setFirstName(event.getNewValue());
+
+        }
         doUpdate(event);
     }
+
 
     /**
      * handles new surname value
@@ -105,7 +125,24 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setSurname(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setSurname(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setSurname(event.getNewValue());
+
+        }
         doUpdate(event);
     }
 
