@@ -41,7 +41,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="txtPasswort" minWidth="175.0" prefHeight="26.0" prefWidth="175.0" promptText="Passwort" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtPassword" minWidth="175.0" prefHeight="26.0" prefWidth="175.0" promptText="Passwort" GridPane.columnIndex="1" />
                         <TextField fx:id="txtUsername" minWidth="175.0" prefHeight="26.0" prefWidth="175.0" promptText="Username" />
                         <TextField fx:id="txtPermissionCaregiver" minWidth="160.0" prefWidth="160.0" promptText="PermissionCaregiver" GridPane.columnIndex="2" />
                         <TextField fx:id="txtPermissionTreatment" prefHeight="26.0" prefWidth="200.0" promptText="PermissionTreatment" GridPane.rowIndex="1" />

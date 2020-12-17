@@ -10,6 +10,19 @@ public class User {
     private int PermissionPatient;
     private int PermissionTreatment;
 
+    public User(
+
+            String Username
+            ,String Password
+            ,int PermissionCaregiver
+            ,int PermissionPatient
+            ,int PermissionTreatment){
+
+        this.Username = Username;
+        this.Password = Password;
+        this.PermissionCaregiver = PermissionCaregiver;
+        this.PermissionPatient = PermissionPatient;
+        this.PermissionTreatment = PermissionTreatment;}
 
     public User(
             int UserID

@@ -38,8 +38,7 @@ public class AllUserController {
     Button btnDelete;
     @FXML
     Button btnAdd;
-    @FXML
-    TextField txtUserID;
+
     @FXML
     TextField txtUsername;
     @FXML
@@ -173,7 +172,7 @@ public class AllUserController {
 
     @FXML
     public void handleAdd() {
-        Integer userID = Integer.parseInt(this.txtUserID.getText());
+
         String username = this.txtUsername.getText();
         String password = this.txtPassword.getText();
         Integer permissionCaregiver = Integer.parseInt(this.txtPermissionCaregiver.getText());
@@ -181,7 +180,7 @@ public class AllUserController {
         Integer permissionPatient = Integer.parseInt(this.txtPermissionPatient.getText());
 
         try {
-            User u = new User(userID,username, password, permissionCaregiver,  permissionTreatment,permissionPatient );
+            User u = new User(username, password, permissionCaregiver,  permissionTreatment,permissionPatient );
             dao.create(u);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -194,7 +193,7 @@ public class AllUserController {
      * removes content from all textfields
      */
     private void clearTextfields() {
-        this.txtUserID.clear();
+
         this.txtUsername.clear();
         this.txtPassword.clear();
         this.txtPermissionCaregiver.clear();

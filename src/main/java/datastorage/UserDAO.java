@@ -21,7 +21,7 @@ public class UserDAO extends DAOimp<User>{
 
     @Override
     protected String getCreateStatementString(User user) {
-        return String.format("INSERT INTO user (UserID, UserName,Password,PermissionCaregiver, PermissionPatient,PermissionTreatment) VALUES ('%s', '%s', '%s', '%s', '%s')", user.getUsername(), user.getPassword(), user.getPermissionCaregiver(),user.getPermissionPatient(),user.getPermissionTreatment());
+        return String.format("INSERT INTO user ( UserName,Password,PermissionCaregiver, PermissionPatient,PermissionTreatment) VALUES ('%s', '%s', '%s', '%s', '%s')", user.getUsername(), user.getPassword(), user.getPermissionCaregiver(),user.getPermissionPatient(),user.getPermissionTreatment());
 
 
     }
@@ -29,7 +29,7 @@ public class UserDAO extends DAOimp<User>{
 
     @Override
     protected String getReadByIDStatementString(int key) {
-        return String.format("SELECT * FROM User WHERE UserID = %d", key);
+        return String.format("SELECT * FROM User WHERE UID = %d", key);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserDAO extends DAOimp<User>{
     @Override
     protected ArrayList<User> getListFromResultSet(ResultSet result) throws SQLException {
         ArrayList<User> list = new ArrayList<User>();
-        User u ;
+        User u  = null;
         while (result.next()) {
 
             u = new User(result.getInt(0),
