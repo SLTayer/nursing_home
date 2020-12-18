@@ -5,18 +5,18 @@ import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import model.Caregiver;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
-
-import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -44,6 +44,8 @@ public class AllPatientController {
     Button btnDelete;
     @FXML
     Button btnAdd;
+    @FXML
+    Button btnBackup;
     @FXML
     TextField txtSurname;
     @FXML
@@ -298,6 +300,47 @@ public class AllPatientController {
         }
         readAllAndShowInTableView();
         clearTextfields();
+    }
+
+    /**
+     * handles a backup-create-click-event. Creates a patient table backup and calls the createBackup method in the {@link PatientDAO}
+     */
+    @FXML
+    public void handleCreateBackup() {
+        try {
+            dao.createBackup();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * handles a backup-load-click-event. Loads a patient table backup and calls the loadBackup method in the {@link PatientDAO}
+     */
+    @FXML
+    public void handleLoadBackup() {
+        try {
+            FXMLLoader popupFxmlLoader = new FXMLLoader();
+            popupFxmlLoader.setLocation(Main.class.getResource("/BackupSelectionPopup.fxml"));
+            DialogPane popupDialog = popupFxmlLoader.load();
+
+            BackupController backupController = popupFxmlLoader.getController();
+            backupController.initialize(dao.getBackups());
+
+            Dialog<ButtonType> popup = new Dialog<>();
+            popup.setDialogPane(popupDialog);
+            popup.setTitle("Backup Laden");
+
+            Optional<ButtonType> clickedButton = popup.showAndWait();
+            if (clickedButton.get() == ButtonType.OK) {
+                String selectedBackup = backupController.getSelectedBackup();
+
+                dao.loadBackup(selectedBackup);
+                readAllAndShowInTableView();
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

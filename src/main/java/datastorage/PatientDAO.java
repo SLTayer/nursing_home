@@ -3,6 +3,9 @@ package datastorage;
 import model.Patient;
 import utils.DateConverter;
 
+import java.sql.Statement;
+import java.text.*;
+import java.util.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -96,6 +99,88 @@ public class PatientDAO extends DAOimp<Patient> {
         return String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
                 "roomnumber = '%s', assets = '%s' WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
                 patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets(), patient.getPid());
+    }
+
+    /**
+     * Creates a backup for the Patient Data
+     */
+    public boolean createBackup() throws SQLException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String today = dateFormat.format(new Date());
+
+        ArrayList<Patient> list;
+        Patient object = null;
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(this.getReadAllStatementString());
+        list = this.getListFromResultSet(result);
+
+        for (Patient patient : list) {
+            try {
+                String query = String.format("INSERT INTO backups (pid, firstname, surname, dateOfBirth, carelevel, roomnumber, assets, backup) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                        patient.getPid(), patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets(), today);
+                st.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns the different Backup Versions
+     */
+    public List<String> getBackups() throws SQLException {
+
+        String statement = "SELECT * FROM backups";
+
+        Statement st = conn.createStatement();
+        ResultSet result = st.executeQuery(statement);
+
+        List<String> backups = new ArrayList<>();
+
+        while (result.next()) {
+            String backup = result.getString(9);
+            if (!backups.contains(backup) && backup != null) {
+                backups.add(backup);
+            }
+        }
+        return backups;
+    }
+
+    /**
+     * Loads a backup
+     */
+    public boolean loadBackup(String backup) throws SQLException {
+        Statement st = conn.createStatement();
+
+        String getBackupsQuery = "SELECT * FROM backups WHERE backup = '" + backup + "'";
+
+        try {
+            ResultSet result = st.executeQuery(getBackupsQuery);
+            List<Patient> patients = new ArrayList<>();
+            while (result.next()) {
+                Integer pid = result.getInt(2);
+                LocalDate date = DateConverter.convertStringToLocalDate(result.getString(5));
+                Patient p = new Patient(pid, result.getString(3), result.getString(4), date,
+                        result.getString(6), result.getString(7), result.getString(8));
+
+                String selectPatientQuery = "SELECT * FROM patient WHERE pid = " + pid;
+                String updatePatientQuery = String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
+                                "roomnumber = '%s', assets = '%s' WHERE pid = %d", p.getFirstName(), p.getSurname(), p.getDateOfBirth(),
+                        p.getCareLevel(), p.getRoomnumber(), p.getAssets(), p.getPid());
+                ResultSet patientResult = st.executeQuery(selectPatientQuery);
+                if (patientResult.next()) {
+                    st.executeUpdate(updatePatientQuery);
+                } else {
+                    st.executeUpdate(getCreateStatementString(p));
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     /**
