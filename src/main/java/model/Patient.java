@@ -16,7 +16,6 @@ public class Patient extends Person {
     private String roomnumber;
     private String assets;
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
-    private LocalDate version;
 
     /**
      * constructs a patient from the given params.
@@ -26,15 +25,13 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      * @param assets
-     * @param version
      */
-    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, String assets, LocalDate version) {
+    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, String assets) {
         super(firstName, surname);
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
         this.assets = assets;
-        this.version = version;
     }
 
     /**
@@ -46,16 +43,14 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      * @param assets
-     * @param version
      */
-    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, String assets, LocalDate version) {
+    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, String assets) {
         super(firstName, surname);
         this.pid = pid;
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
         this.assets = assets;
-        this.version = version;
     }
 
     /**
@@ -73,19 +68,6 @@ public class Patient extends Person {
     public String getDateOfBirth() {
         return dateOfBirth.toString();
     }
-
-    /**
-     *
-     * @return version
-     */
-    public String getVersion() {
-        if (version == null) {
-            return null;
-        } else {
-            return version.toString();
-        }
-    }
-
 
     /**
      * convert given param to a localDate and store as new <code>birthOfDate</code>
@@ -169,7 +151,6 @@ public class Patient extends Person {
                 "\nCarelevel: " + this.careLevel +
                 "\nRoomnumber: " + this.roomnumber +
                 "\nAssets: " + this.assets +
-                "\nVersion: " + this.version +
                 "\n";
     }
 }

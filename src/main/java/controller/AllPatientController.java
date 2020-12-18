@@ -5,15 +5,22 @@ import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -210,7 +217,7 @@ public class AllPatientController {
         String room = this.txtRoom.getText();
         String assets = this.txtAssets.getText();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room, assets, null);
+            Patient p = new Patient(firstname, surname, date, carelevel, room, assets);
             dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -237,8 +244,25 @@ public class AllPatientController {
     @FXML
     public void handleLoadBackup() {
         try {
-            dao.getBackups();
-        } catch (SQLException e) {
+            FXMLLoader popupFxmlLoader = new FXMLLoader();
+            popupFxmlLoader.setLocation(Main.class.getResource("/BackupSelectionPopup.fxml"));
+            DialogPane popupDialog = popupFxmlLoader.load();
+
+            BackupController backupController = popupFxmlLoader.getController();
+            backupController.initialize(dao.getBackups());
+
+            Dialog<ButtonType> popup = new Dialog<>();
+            popup.setDialogPane(popupDialog);
+            popup.setTitle("Backup Laden");
+
+            Optional<ButtonType> clickedButton = popup.showAndWait();
+            if (clickedButton.get() == ButtonType.OK) {
+                String selectedBackup = backupController.getSelectedBackup();
+
+                dao.loadBackup(selectedBackup);
+                readAllAndShowInTableView();
+            }
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
