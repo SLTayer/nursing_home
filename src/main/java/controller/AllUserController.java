@@ -54,6 +54,8 @@ public class AllUserController {
     private ObservableList<User> tableviewContent = FXCollections.observableArrayList();
     private UserDAO dao;
 
+
+
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
      */
@@ -161,7 +163,7 @@ public class AllUserController {
         User selectedItem = this.tableView.getSelectionModel().getSelectedItem();
         this.tableView.getItems().remove(selectedItem);
         try {
-            dao.deleteById((int) selectedItem.getUserID());
+            dao.deleteById((selectedItem.getUserID()) );
 
         } catch (SQLException e) {
             e.printStackTrace();
