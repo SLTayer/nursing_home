@@ -20,8 +20,7 @@ import model.User;
 public class MainWindowController {
     private UserDAO dao;
     private Connection conn;
-    private User loggedInUser;
-   private  FXMLLoader loader2 = new FXMLLoader();
+
     @FXML
     private BorderPane mainBorderPane;
     @FXML private TextField UsernameInput;
@@ -93,12 +92,7 @@ public class MainWindowController {
     @FXML
     public void handleLogout(ActionEvent actionEvent) {
 
-            try {
-                loader2.load(getClass().getResource("/MainWindowViewLogin.fxml"));
-                mainBorderPane.setCenter(loader2.load(getClass().getResource("/MainWindowViewLogin.fxml")));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            System.exit(0);
 
 
     }
