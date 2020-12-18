@@ -17,7 +17,8 @@ import model.Caregiver;
 
 import java.sql.SQLException;
 import java.util.List;
-
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * The <code>AllCaregiverController</code> contains the entire logic of the caregiver view. It determines which data is displayed and how to react to events.
@@ -84,7 +85,24 @@ public class AllCaregiverController {
 
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event){
-        event.getRowValue().setSurname(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setSurname(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setSurname(event.getNewValue());
+
+        }
         doUpdate(event);
     }
 
@@ -95,8 +113,26 @@ public class AllCaregiverController {
 
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Caregiver, String> event){
-        event.getRowValue().setFirstName(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setFirstName(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setFirstName(event.getNewValue());
+
+        }
         doUpdate(event);
+
     }
 
     /**
@@ -165,18 +201,47 @@ public class AllCaregiverController {
 
     @FXML
     public void handleAdd() {
-        String firstname = this.txtFirstname.getText();
-        String surname = this.txtSurname.getText();
-        String phoneNumber = this.txtPhoneNumber.getText();
 
-        try {
-            Caregiver c = new Caregiver(firstname, surname, phoneNumber);
-            dao.create(c);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Boolean hasNumeric = false;
+        String sample = this.txtFirstname.getText();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
         }
-        readAllAndShowInTableView();
+        Boolean hasNumeric2 = false;
+        String sample2 = this.txtSurname.getText();
+        char[] chars2 = sample.toCharArray();
+        StringBuilder sb2 = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+
+        if ((hasNumeric) | (hasNumeric2))
+        {
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        }
+        else
+            {
+            String firstname = this.txtFirstname.getText();
+            String surname = this.txtSurname.getText();
+            String phoneNumber = this.txtPhoneNumber.getText();
+
+            try {
+                Caregiver c = new Caregiver(firstname, surname, phoneNumber);
+                dao.create(c);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            readAllAndShowInTableView();
+        }
         clearTextfields();
+
     }
 
 

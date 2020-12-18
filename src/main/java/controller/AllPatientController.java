@@ -8,9 +8,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import model.Caregiver;
 import model.Patient;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
+import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -95,9 +98,27 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setFirstName(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setFirstName(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setFirstName(event.getNewValue());
+
+        }
         doUpdate(event);
     }
+
 
     /**
      * handles new surname value
@@ -105,7 +126,24 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event){
-        event.getRowValue().setSurname(event.getNewValue());
+        Boolean hasNumeric = false;
+        String sample = event.getNewValue();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        if (hasNumeric) {
+            event.getRowValue().setSurname(event.getOldValue());
+            doUpdate(event);
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        } else {
+            event.getRowValue().setSurname(event.getNewValue());
+
+        }
         doUpdate(event);
     }
 
@@ -200,6 +238,51 @@ public class AllPatientController {
      */
     @FXML
     public void handleAdd() {
+
+        Boolean hasNumeric = false;
+        String sample = this.txtFirstname.getText();
+        char[] chars = sample.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+        Boolean hasNumeric2 = false;
+        String sample2 = this.txtSurname.getText();
+        char[] chars2 = sample.toCharArray();
+        StringBuilder sb2 = new StringBuilder();
+        for(char c : chars){
+            if(Character.isDigit(c)){
+                hasNumeric = true;
+            }
+        }
+
+        if ((hasNumeric) | (hasNumeric2))
+        {
+            JFrame frame = new JFrame("Error");
+            JOptionPane.showMessageDialog(frame, "Im Namen dürfen keine Zahlen vorkommen");
+        }
+        else
+        {
+            String surname = this.txtSurname.getText();
+            String firstname = this.txtFirstname.getText();
+            String birthday = this.txtBirthday.getText();
+            LocalDate date = DateConverter.convertStringToLocalDate(birthday);
+            String carelevel = this.txtCarelevel.getText();
+            String room = this.txtRoom.getText();
+            String assets = this.txtAssets.getText();
+            try {
+                Patient p = new Patient(firstname, surname, date, carelevel, room, assets);
+                dao.create(p);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            readAllAndShowInTableView();
+        }
+        clearTextfields();
+
+
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
         String birthday = this.txtBirthday.getText();
