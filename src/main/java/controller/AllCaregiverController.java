@@ -2,6 +2,7 @@ package controller;
 
 import datastorage.CaregiverDAO;
 import datastorage.DAOFactory;
+import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,6 +53,7 @@ public class AllCaregiverController {
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
+
      */
     public void initialize() {
         readAllAndShowInTableView();
@@ -75,7 +77,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * handles new firstname value
+     * handles new surname value
      * @param event event including the value that a user entered into the cell
      */
 
@@ -86,17 +88,32 @@ public class AllCaregiverController {
         doUpdate(event);
     }
 
+    /**
+     * handles new firstname value
+     * @param event event including the value that a user entered into the cell
+     */
+
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Caregiver, String> event){
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
+    /**
+     * handles new phoneNumber value
+     * @param event event including the value that a user entered into the cell
+     */
+
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event){
         event.getRowValue().setPhoneNumber(event.getNewValue());
         doUpdate(event);
     }
+
+    /**
+     * updates a caregiver by calling the update-Method in the {@link CaregiverDAO}
+     * @param t row to be updated by the user (includes the patient)
+     */
 
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
         try {
@@ -105,6 +122,10 @@ public class AllCaregiverController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * calls readAll in {@link CaregiverDAO} and shows caregiver in the table
+     */
 
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
@@ -120,6 +141,10 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * handles a delete-click-event. Calls the delete methods in the {@link CaregiverDAO} and {@link TreatmentDAO}
+     */
+
     @FXML
     public void handleDeleteRow() {
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -133,6 +158,10 @@ public class AllCaregiverController {
         }
         this.handleAdd();
     }
+
+    /**
+     * handles a add-click-event. Creates a caregiver and calls the create method in the {@link CaregiverDAO}
+     */
 
     @FXML
     public void handleAdd() {
@@ -154,6 +183,7 @@ public class AllCaregiverController {
     /**
      * removes content from all textfields
      */
+
     private void clearTextfields() {
         this.txtFirstname.clear();
         this.txtSurname.clear();

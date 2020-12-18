@@ -1,5 +1,6 @@
 package controller;
 
+import datastorage.CaregiverDAO;
 import datastorage.DAOFactory;
 import datastorage.PatientDAO;
 import datastorage.TreatmentDAO;
@@ -53,14 +54,14 @@ public class TreatmentController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        /*CaregiverDAO cDao = DAOFactory.getDAOFactory().createCaregiverDAO();
+        CaregiverDAO cDao = DAOFactory.getDAOFactory().createCaregiverDAO();
         try {
             this.caregiver = cDao.read((int) treatment.getCid());
             this.treatment = treatment;
             showData();
         } catch (SQLException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void showData(){

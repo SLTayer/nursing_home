@@ -63,8 +63,8 @@ public class AllTreatmentController {
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
-        //comboBox2.setItems(myComboBoxData2);
-        //comboBox2.getSelectionModel().select(0);
+        comboBox2.setItems(myComboBoxData2);
+        comboBox2.getSelectionModel().select(0);
         this.main = main;
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
@@ -260,7 +260,7 @@ public class AllTreatmentController {
             Stage stage = new Stage();
             TreatmentController controller = loader.getController();
 
-            controller.initializeController(this, stage, treatment );
+            controller.initializeController(this, stage, treatment);
 
             stage.setScene(scene);
             stage.setResizable(false);
