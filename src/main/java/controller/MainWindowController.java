@@ -74,7 +74,7 @@ public class MainWindowController {
             }
         } else {
             JFrame frame = new JFrame("Error");
-            JOptionPane.showMessageDialog(frame, "Mach doch richtig du hund");
+            JOptionPane.showMessageDialog(frame, "Kombination aus Username und Passwort ist nicht korrekt!");
 
         }
 
